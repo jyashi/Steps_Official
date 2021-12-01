@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Calendar extends StatelessWidget {
   @override
@@ -21,7 +24,16 @@ class CalendarPage extends StatefulWidget {
 class _CalendarState extends State<CalendarPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+
   //CalendarFormat _calendarFormat = CalendarFormat.month;
+  Future _saveJSon() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Map<String, dynamic> user = {'savedDate': _selectedDay};
+
+    bool result =
+        await prefs.setString('savedDate', jsonEncode(user.toString()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +64,15 @@ class _CalendarState extends State<CalendarPage> {
                         _selectedDay = selectedDay;
                         _focusedDay = focusedDay;
                       });
-                      Get.toNamed("/report", arguments: _selectedDay);
+
+                      Map<String, dynamic> myJson = {
+                        'savedDate': _selectedDay.toString()
+                      };
+
+                      // jsonEncode(myJson);
+                      _saveJSon();
+                      Get.toNamed("/report",
+                          arguments: [_selectedDay, myJson.toString()]);
                     }
                   }),
               // TextButton(

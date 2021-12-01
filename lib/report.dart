@@ -40,6 +40,7 @@ class _ReportPageState extends State<ReportPage> {
     super.initState();
   }
 
+  var one = Get.arguments;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -56,7 +57,7 @@ class _ReportPageState extends State<ReportPage> {
                     Container(
                       padding: const EdgeInsets.only(left: 25, right: 25),
                       child: Text(
-                        DateFormat('yyyy年 M月 d日').format(Get.arguments),
+                        DateFormat('yyyy年 M月 d日').format(one[0]),
                         style: const TextStyle(
                           color: Color(0xFF555647),
                           fontSize: 25,
@@ -77,8 +78,8 @@ class _ReportPageState extends State<ReportPage> {
                       padding: const EdgeInsets.only(left: 25, right: 25),
                       child: Row(
                         children: [
-                          const Text(
-                            "Enter Memo",
+                          Text(
+                            one[1],
                             style: TextStyle(
                                 color: Color(0xFF1f2326),
                                 fontSize: 20,
