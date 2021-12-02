@@ -4,6 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'package:ver1_20210924/nav_sempai_backend.dart';
+import 'calendar.dart';
 // import 'home_page.dart';
 
 /*
@@ -78,13 +80,12 @@ class _NavImageBoxState extends State<NavImageBox> {
       // print("|||||");
       // print(imageFile?.path.toString());
     });
+    return img;
   }
 
   Widget navShowPic() {
     if (imageFile != null) {
       String _path = imageFile!.path;
-      print("IF fired");
-      // bodyText = _path;
 
       return Image.file(
         File(_path),

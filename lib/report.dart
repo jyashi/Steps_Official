@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import "package:intl/intl.dart";
 import 'package:ver1_20210924/nav_image_widget.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:ver1_20210924/nav_sempai_backend.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({Key? key}) : super(key: key);
@@ -79,7 +80,7 @@ class _ReportPageState extends State<ReportPage> {
                       child: Row(
                         children: [
                           Text(
-                            one[1],
+                            "${getValue()}",
                             style: TextStyle(
                                 color: Color(0xFF1f2326),
                                 fontSize: 20,

@@ -4,6 +4,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'nav_sempai_backend.dart' as nav;
 
 class Calendar extends StatelessWidget {
   @override
@@ -26,14 +27,6 @@ class _CalendarState extends State<CalendarPage> {
   DateTime? _selectedDay;
 
   //CalendarFormat _calendarFormat = CalendarFormat.month;
-  Future _saveJSon() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    Map<String, dynamic> user = {'savedDate': _selectedDay};
-
-    bool result =
-        await prefs.setString('savedDate', jsonEncode(user.toString()));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +62,8 @@ class _CalendarState extends State<CalendarPage> {
                         'savedDate': _selectedDay.toString()
                       };
 
-                      // jsonEncode(myJson);
-                      _saveJSon();
+                      nav.saveData(savedDate: _selectedDay!);
+
                       Get.toNamed("/report",
                           arguments: [_selectedDay, myJson.toString()]);
                     }

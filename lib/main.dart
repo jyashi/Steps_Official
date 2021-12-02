@@ -3,6 +3,7 @@ import 'package:ver1_20210924/calendar.dart';
 import 'package:ver1_20210924/report.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:ver1_20210924/test.dart';
 
 void main() {
   runApp(MyApp()
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       getPages: [
+        // GetPage(name: "/", page: () => TestPage()),
         GetPage(name: "/", page: () => CalendarPage()),
         GetPage(name: "/report", page: () => ReportPage())
       ],
