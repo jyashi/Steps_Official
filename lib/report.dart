@@ -41,7 +41,17 @@ class _ReportPageState extends State<ReportPage> {
     super.initState();
   }
 
+  String waitForData() {
+    while (one[1] == null) {}
+    return one[1];
+  }
+
   var one = Get.arguments;
+  Widget printList() {
+    print(one[1]);
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -55,6 +65,7 @@ class _ReportPageState extends State<ReportPage> {
                 color: const Color(0xFFefefef),
                 child: Column(
                   children: [
+                    printList(),
                     Container(
                       padding: const EdgeInsets.only(left: 25, right: 25),
                       child: Text(
@@ -79,9 +90,11 @@ class _ReportPageState extends State<ReportPage> {
                       padding: const EdgeInsets.only(left: 25, right: 25),
                       child: Row(
                         children: [
+                          //Memo part
+
                           Text(
-                            "${getValue()}",
-                            style: TextStyle(
+                            "${one[1]}",
+                            style: const TextStyle(
                                 color: Color(0xFF1f2326),
                                 fontSize: 20,
                                 decoration: TextDecoration.none),

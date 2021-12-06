@@ -28,6 +28,15 @@ class _CalendarState extends State<CalendarPage> {
 
   //CalendarFormat _calendarFormat = CalendarFormat.month;
 
+  bool isLoading = false;
+
+  Future<List> ButtonPressed() async {
+    var myList =
+        await nav.loadData(savedDate: _selectedDay!).then((myList) => myList);
+    print("===$myList");
+    return myList;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +61,10 @@ class _CalendarState extends State<CalendarPage> {
                     return isSameDay(_selectedDay, day);
                   },
                   onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      isLoading = true;
+                    });
+
                     if (!isSameDay(_selectedDay, selectedDay)) {
                       setState(() {
                         _selectedDay = selectedDay;
@@ -59,15 +72,29 @@ class _CalendarState extends State<CalendarPage> {
                       });
 
                       Map<String, dynamic> myJson = {
-                        'savedDate': _selectedDay.toString()
+                        'savedDate': _selectedDay.toString(),
+                        "savedMemo": "Memo from calander",
                       };
 
-                      nav.saveData(savedDate: _selectedDay!);
-
+                      nav.saveData(
+                          savedDate: _selectedDay!,
+                          savedMemo: "Special memo for 12 / 07");
+                      var memoData = ButtonPressed();
                       Get.toNamed("/report",
-                          arguments: [_selectedDay, myJson.toString()]);
+                          arguments: [_selectedDay, memoData]);
+                      Future.delayed(const Duration(milliseconds: 500), () {
+                        setState(() {});
+                      });
                     }
                   }),
+
+              // Center(
+              //     child: isLoading == true
+              //         ? const CircularProgressIndicator()
+              //         : Container()),
+
+              // CircularProgressIndicator(),
+
               // TextButton(
               //   child: Text("1ページ目に遷移する"),
               //   onPressed: (){

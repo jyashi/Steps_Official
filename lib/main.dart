@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ver1_20210924/calendar.dart';
+import 'package:ver1_20210924/nav_sempai_backend.dart';
 import 'package:ver1_20210924/report.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ver1_20210924/test.dart';
+import 'loading_bar_widget.dart';
 
 void main() {
   runApp(MyApp()
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         // GetPage(name: "/", page: () => TestPage()),
         GetPage(name: "/", page: () => CalendarPage()),
+        // GetPage(name: "/loading_bar_widget", page: () => LoadingWidget()),
         GetPage(name: "/report", page: () => ReportPage())
       ],
     );

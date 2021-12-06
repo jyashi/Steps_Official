@@ -231,38 +231,73 @@ class _navImageClassState extends State<navImageClass> {
 //       });
 // }
 
-saveData({required DateTime savedDate}) async {
+saveData(
+    {required DateTime savedDate, String? savedMemo, String? savedPath}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  final myDiaryData = DiaryData(
-    savedDate: savedDate.toString(),
-    savedMemo: "Test Memo",
-  );
-  String json = jsonEncode(myDiaryData);
+  // final myDiaryData = DiaryData(
+  //   savedDate: savedDate.toString(),
+  //   savedMemo: savedMemo,
+  //   savedPath: savedPath,
+  // );
+  String id = savedDate.toString();
+  // String json = jsonEncode(myDiaryData);
 
-  print("Saved Json $json");
-  prefs.setString("savedDate", json);
+  // print("Saved Json ${json[0]}");
+  prefs.setString(id, savedDate.toString());
+
+  prefs.setString(id + "memo", savedMemo ?? "");
+  prefs.setString(id + "path", savedPath ?? "");
+  print("Watch this id: $id + memo");
 }
 
-loadData() async {
+Future loadData({required DateTime savedDate}) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? json = prefs.getString("savedDate");
+  List<String?> json = ["", "", ""];
+  String id = savedDate.toString();
+
+  json[0] = prefs.getString(id);
+  String? jsonUncoded = prefs.getString(id + "memo");
+  json[1] = jsonUncoded ?? "";
+  json[2] = prefs.getString(id + "path");
+
   print("Loaded Json $json");
 
   if (json == null) {
     print("No data found in prefs");
+
     return null;
   } else {
-    Map<String, dynamic> map = jsonDecode(json);
-    print("map: $map");
-    var diaryData = DiaryData.fromJson(map);
-    print("Saved Date: ${diaryData.savedDate},${diaryData.savedMemo}");
+    // Map<String, dynamic> map = jsonDecode(json);
+    // // print("map: ${map["savedMemo"]}");
+    // var diaryData = DiaryData.fromJson(map);
+    // print("Saved Date: ${diaryData.savedDate},${diaryData.savedMemo}");
 
-    return map["savedDate"];
+    return json;
   }
 }
 
-getValue() async {
-  final data = await loadData();
-  return data;
+// getValue() async {
+//   final data = await loadData();
+//   return data;
+// }
+
+class ShowLoadingBar extends StatefulWidget {
+  const ShowLoadingBar({Key? key}) : super(key: key);
+
+  @override
+  _ShowLoadingBarState createState() => _ShowLoadingBarState();
+}
+
+class _ShowLoadingBarState extends State<ShowLoadingBar> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+void printfn() {
+  print("showing bar");
 }
