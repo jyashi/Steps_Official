@@ -31,8 +31,7 @@ class _CalendarState extends State<CalendarPage> {
   bool isLoading = false;
 
   Future<List> ButtonPressed() async {
-    var myList =
-        await nav.loadData(savedDate: _selectedDay!).then((myList) => myList);
+    var myList = await nav.loadData(savedDate: _selectedDay!);
     print("===$myList");
     return myList;
   }
@@ -78,7 +77,7 @@ class _CalendarState extends State<CalendarPage> {
 
                       nav.saveData(
                           savedDate: _selectedDay!,
-                          savedMemo: "Special memo for 12 / 07");
+                          savedMemo: "Saved new data");
                       var memoData = ButtonPressed();
                       Get.toNamed("/report",
                           arguments: [_selectedDay, memoData]);

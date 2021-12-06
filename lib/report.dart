@@ -47,9 +47,15 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   var one = Get.arguments;
+
   Widget printList() {
     print(one[1]);
     return Container();
+  }
+
+  myMemo() async {
+    var myString = await loadData(savedDate: one[0]);
+    return myString[1];
   }
 
   @override
@@ -91,14 +97,28 @@ class _ReportPageState extends State<ReportPage> {
                       child: Row(
                         children: [
                           //Memo part
+                          FutureBuilder(
+                            future: myMemo(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                print("Returning text value");
+                                // Future.delayed(const Duration(seconds: 2), () {
+                                //   print("Value after future was ${myData()}");
 
-                          Text(
-                            "${one[1]}",
-                            style: const TextStyle(
-                                color: Color(0xFF1f2326),
-                                fontSize: 20,
-                                decoration: TextDecoration.none),
+                                // });
+                                return Text("${snapshot.data}");
+                              }
+                              return CircularProgressIndicator();
+                            },
                           ),
+                          // Text(
+                          //   "${one[1]}",
+                          //   style: const TextStyle(
+                          //       color: Color(0xFF1f2326),
+                          //       fontSize: 20,
+                          //       decoration: TextDecoration.none),
+                          // ),
                           Expanded(child: Container()),
                           const Text(
                             "Detail",
