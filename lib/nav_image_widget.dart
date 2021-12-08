@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:ver1_20210924/nav_sempai_backend.dart';
 import 'calendar.dart';
+import 'report.dart';
 // import 'home_page.dart';
 
 /*
@@ -80,13 +81,14 @@ class _NavImageBoxState extends State<NavImageBox> {
       // print("|||||");
       // print(imageFile?.path.toString());
     });
+
     return img;
   }
 
-  Widget navShowPic() {
-    if (imageFile != null) {
-      String _path = imageFile!.path;
-
+  Widget navShowPic({String? futurePath}) {
+    if (futurePath != null) {
+      print("navi");
+      String _path = futurePath;
       return Image.file(
         File(_path),
         width: 350,
@@ -94,11 +96,21 @@ class _NavImageBoxState extends State<NavImageBox> {
         fit: BoxFit.contain,
       );
     } else {
-      print("Else fired");
-      return Container(
-        alignment: Alignment.center,
-        child: Icon(Icons.error_sharp),
-      );
+      if (imageFile != null) {
+        String _path = imageFile!.path;
+        saveData(savedDate: getDate(), savedPath: _path);
+        return Image.file(
+          File(_path),
+          width: 350,
+          height: 350,
+          fit: BoxFit.contain,
+        );
+      } else {
+        return Container(
+          alignment: Alignment.bottomCenter,
+          child: Icon(Icons.error_sharp),
+        );
+      }
     }
   }
 
@@ -132,10 +144,22 @@ class _NavImageBoxState extends State<NavImageBox> {
         });
   }
 
+  Future<String> myPath() async {
+    var myPath = await loadData(savedDate: DateTime.now());
+    return myPath[2];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      navShowPic(),
+      FutureBuilder(
+          future: myPath(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {}
+
+            return navShowPic();
+          }),
+      // navShowPic(),
 
       SizedBox(
         width: 300,

@@ -256,25 +256,31 @@ Future loadData({required DateTime savedDate}) async {
   List<String?> json = ["", "", ""];
   String id = savedDate.toString();
 
-  json[0] = prefs.getString(id);
-  String? jsonUncoded = prefs.getString(id + "memo");
-  json[1] = jsonUncoded ?? "";
-  json[2] = prefs.getString(id + "path");
-
-  print("Loaded Json $json");
-
-  if (json == null) {
-    print("No data found in prefs");
-
-    return null;
-  } else {
-    // Map<String, dynamic> map = jsonDecode(json);
-    // // print("map: ${map["savedMemo"]}");
-    // var diaryData = DiaryData.fromJson(map);
-    // print("Saved Date: ${diaryData.savedDate},${diaryData.savedMemo}");
+  if (prefs.containsKey(id) == true) {
+    print("Contains key...");
+    json[0] = prefs.getString(id);
+    String? jsonUncoded = prefs.getString(id + "memo");
+    json[1] = jsonUncoded ?? "";
+    json[2] = prefs.getString(id + "path");
 
     return json;
   }
+  print("Key not found");
+  return json;
+  // print("Loaded Json $json");
+
+  // if (json == null) {
+  //   print("No data found in prefs");
+
+  //   return null;
+  // } else {
+  //   // Map<String, dynamic> map = jsonDecode(json);
+  //   // // print("map: ${map["savedMemo"]}");
+  //   // var diaryData = DiaryData.fromJson(map);
+  //   // print("Saved Date: ${diaryData.savedDate},${diaryData.savedMemo}");
+
+  //   return json;
+  // }
 }
 
 // getValue() async {
@@ -296,6 +302,12 @@ class _ShowLoadingBarState extends State<ShowLoadingBar> {
       child: CircularProgressIndicator(),
     );
   }
+}
+
+clearData() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  await preferences.clear();
+  print("ALL DATA DELETED...");
 }
 
 void printfn() {

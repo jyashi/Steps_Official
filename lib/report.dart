@@ -6,6 +6,17 @@ import 'package:ver1_20210924/nav_image_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ver1_20210924/nav_sempai_backend.dart';
 
+// To access this date from other classes.
+getDate() {
+  var date = [
+    DateTime.now(),
+    "",
+  ];
+  date[0] = Get.arguments;
+
+  return date[0];
+}
+
 class ReportPage extends StatefulWidget {
   const ReportPage({Key? key}) : super(key: key);
 
@@ -35,10 +46,16 @@ class _ReportPageState extends State<ReportPage> {
     });
   }
 
+  String editText = "";
+  final _textController = TextEditingController();
   @override
   void initState() {
     _readData();
     super.initState();
+
+    _textController.addListener(() {
+      editText;
+    });
   }
 
   String waitForData() {
@@ -48,14 +65,17 @@ class _ReportPageState extends State<ReportPage> {
 
   var one = Get.arguments;
 
-  Widget printList() {
-    print(one[1]);
-    return Container();
+  Future<String> myMemo() async {
+    var myString;
+    myString = await loadData(savedDate: one[0]);
+
+    return myString[1];
   }
 
-  myMemo() async {
-    var myString = await loadData(savedDate: one[0]);
-    return myString[1];
+  void refreshFuture() {
+    setState(() {
+      myMemo();
+    });
   }
 
   @override
@@ -71,7 +91,6 @@ class _ReportPageState extends State<ReportPage> {
                 color: const Color(0xFFefefef),
                 child: Column(
                   children: [
-                    printList(),
                     Container(
                       padding: const EdgeInsets.only(left: 25, right: 25),
                       child: Text(
@@ -97,28 +116,14 @@ class _ReportPageState extends State<ReportPage> {
                       child: Row(
                         children: [
                           //Memo part
-                          FutureBuilder(
-                            future: myMemo(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                print("Returning text value");
-                                // Future.delayed(const Duration(seconds: 2), () {
-                                //   print("Value after future was ${myData()}");
 
-                                // });
-                                return Text("${snapshot.data}");
-                              }
-                              return CircularProgressIndicator();
-                            },
+                          Text(
+                            "Enter Memo",
+                            style: const TextStyle(
+                                color: Color(0xFF1f2326),
+                                fontSize: 20,
+                                decoration: TextDecoration.none),
                           ),
-                          // Text(
-                          //   "${one[1]}",
-                          //   style: const TextStyle(
-                          //       color: Color(0xFF1f2326),
-                          //       fontSize: 20,
-                          //       decoration: TextDecoration.none),
-                          // ),
                           Expanded(child: Container()),
                           const Text(
                             "Detail",
@@ -153,9 +158,103 @@ class _ReportPageState extends State<ReportPage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
                           color: Colors.white),
+
+                      // Editable Text field
+                      child: FutureBuilder(
+                        future: myMemo(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            print("Returning text value");
+                            // Future.delayed(const Duration(seconds: 2), () {
+                            //   print("Value after future was ${myData()}");
+
+                            // });
+                            // return CircularProgressIndicator();
+                            // return Text("${snapshot.data}");
+                          }
+                          editText = snapshot.data.toString();
+                          return Stack(children: [
+                            Text(editText),
+
+                            // TextButton(
+                            //     style:
+                            //         ButtonStyle(alignment: Alignment.topRight),
+                            //     onPressed: () {
+                            //       print("Text button called");
+                            //       print("The Edit Text property is: $editText");
+                            //       setState(() {
+                            //         editText = "Yohohoh";
+                            //       });
+                            //     },
+                            //     child: Text("Press here")),
+                            //----------------------
+                            TextButton(
+                                onPressed: () {
+                                  _textController.text = editText;
+
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                              title: Text("Enter Memo"),
+                                              content: TextField(
+                                                restorationId: editText,
+                                                // onChanged: (value) =>
+                                                //     setState(() {
+                                                //   print("Updated edit text");
+                                                //   editText = _textController.text;
+                                                // }),
+                                                controller: _textController,
+                                                keyboardType:
+                                                    TextInputType.multiline,
+                                                maxLines: null,
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      navigator!.pop(context);
+                                                    },
+                                                    child: Text("Cancel")),
+                                                ElevatedButton(
+                                                    onPressed: () {
+                                                      saveData(
+                                                          savedDate: one[0],
+                                                          savedMemo:
+                                                              _textController
+                                                                  .text);
+                                                      setState(() {
+                                                        myMemo();
+                                                        print(
+                                                            "MyMemo refreshing...");
+                                                      });
+                                                      navigator!.pop(context);
+                                                    },
+                                                    child: Text("Submit")),
+                                              ]
+                                              // navigator.of(context).pop(_textController.text)],
+                                              ));
+                                },
+                                child: Text(""))
+                          ]);
+                          // return Text(editText);
+                          // return Text("${snapshot.data}");
+
+                          // else {
+                          //   return CircularProgressIndicator();
+                          // }
+                        },
+                      ),
                     ),
-                    const SizedBox(
-                      height: 20,
+                    SizedBox(
+                      height: 50,
+                      child: Row(
+                        children: [
+                          TextButton(
+                            onPressed: () {},
+                            child: Text("Delete"),
+                          )
+                        ],
+                      ),
                     ),
                     Container(
                       padding: const EdgeInsets.only(left: 25, right: 25),

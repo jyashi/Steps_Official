@@ -70,20 +70,37 @@ class _CalendarState extends State<CalendarPage> {
                         _focusedDay = focusedDay;
                       });
 
-                      Map<String, dynamic> myJson = {
-                        'savedDate': _selectedDay.toString(),
-                        "savedMemo": "Memo from calander",
-                      };
+                      // Map<String, dynamic> myJson = {
+                      //   'savedDate': _selectedDay.toString(),
+                      //   "savedMemo": "Memo from calander",
+                      // };
 
-                      nav.saveData(
-                          savedDate: _selectedDay!,
-                          savedMemo: "Saved new data");
-                      var memoData = ButtonPressed();
-                      Get.toNamed("/report",
-                          arguments: [_selectedDay, memoData]);
-                      Future.delayed(const Duration(milliseconds: 500), () {
-                        setState(() {});
+                      // nav.saveData(
+                      //     savedDate: _selectedDay!,
+                      //     savedMemo: "Its another day ");
+
+                      // if (_selectedDay.toString() ==
+                      //     "2021-12-06 00:00:00.000Z") {
+                      //   nav.saveData(
+                      //       savedDate: _selectedDay!,
+                      //       savedMemo: "Its the 6th ");
+                      // }
+
+                      Get.toNamed("/report", arguments: [_selectedDay]);
+                      // Future.delayed(const Duration(milliseconds: 500), () {
+                      //   setState(() {});
+                      // });
+                    } else {
+                      setState(() {
+                        _selectedDay = selectedDay;
+                        _focusedDay = focusedDay;
                       });
+
+                      print("THIS IS TRIGGER");
+                      // nav.saveData(
+                      //     savedDate: _focusedDay,
+                      //     savedMemo: "Pressed on current day");
+                      Get.toNamed("/report", arguments: [_focusedDay]);
                     }
                   }),
 
