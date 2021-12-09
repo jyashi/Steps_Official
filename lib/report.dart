@@ -8,11 +8,7 @@ import 'package:ver1_20210924/nav_sempai_backend.dart';
 
 // To access this date from other classes.
 getDate() {
-  var date = [
-    DateTime.now(),
-    "",
-  ];
-  date[0] = Get.arguments;
+  var date = Get.arguments;
 
   return date[0];
 }
